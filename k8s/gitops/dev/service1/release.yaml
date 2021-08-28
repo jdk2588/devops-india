@@ -1,0 +1,26 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: "service1"
+  namespace: "default"
+spec:
+  releaseName: "service1-svc"
+  targetNamespace: "default"
+  chart:
+    spec:
+      chart: k8s/helm-charts/service1
+      version: 'v1.0.0'
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+      interval: 1m
+  valuesFrom:
+    - kind: ConfigMap
+      name: service1
+      valuesKey: service1.yaml
+  interval: 5m
+  install:
+    remediation:
+      retries: 3
+
